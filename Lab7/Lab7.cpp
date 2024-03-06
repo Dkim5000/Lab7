@@ -17,7 +17,8 @@ int main()
 
 	// Create the ball
 	PhysicsCircle ball;
-	ball.setCenter(Vector2f(400, 300));
+	ball.applyImpulse(Vector2f(0.2, 0.7));
+	ball.setCenter(Vector2f(400, 352));
 	ball.setRadius(20);
 	world.AddPhysicsBody(ball);
 
@@ -27,6 +28,38 @@ int main()
 	floor.setCenter(Vector2f(400, 590));
 	floor.setStatic(true);
 	world.AddPhysicsBody(floor);
+
+	PhysicsRectangle wall1;
+	wall1.setSize(Vector2f(20, 800));
+	wall1.setCenter(Vector2f(10, 300));
+	wall1.setStatic(true);
+	world.AddPhysicsBody(wall1);
+
+	PhysicsRectangle wall2; 
+	wall2.setSize(Vector2f(20, 800)); 
+	wall2.setCenter(Vector2f(790, 300)); 
+	wall2.setStatic(true); 
+	world.AddPhysicsBody(wall2); 
+
+	PhysicsRectangle ceiling; 
+	ceiling.setSize(Vector2f(800, 20)); 
+	ceiling.setCenter(Vector2f(400, 10)); 
+	ceiling.setStatic(true); 
+	world.AddPhysicsBody(ceiling); 
+
+	PhysicsRectangle block;
+	block.setSize(Vector2f(200, 100));
+	block.setCenter(Vector2f(400, 300));
+	block.setStatic(true);
+	world.AddPhysicsBody(block);
+	int bangCount(1); 
+	block.onCollision = [&bangCount](PhysicsBodyCollisionResult result) { 
+		cout << "bang " << bangCount << endl; 
+		bangCount++;
+		if (bangCount == 4) {
+			exit(0);
+		};
+	};
 
 	int thudCount(0);
 	floor.onCollision = [&thudCount](PhysicsBodyCollisionResult result) {
@@ -48,6 +81,10 @@ int main()
 		window.clear(Color(0, 0, 0));
 		window.draw(ball);
 		window.draw(floor);
+		window.draw(wall1);
+		window.draw(wall2);
+		window.draw(ceiling);
+		window.draw(block);
 		window.display();
 	}
 }
